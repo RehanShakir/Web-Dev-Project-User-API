@@ -41,7 +41,7 @@ router.post("/", upload.single("productImage"), async (req, res) => {
     Product.price = req.body.price;
     Product.category = req.body.category;
     Product.tags = req.body.tags;
-    Product.productImage = `http://localhost:3000/productImage/${req.file.filename}`;
+    Product.productImage = `https://my-shop-rest-api.herokuapp.com/productImage/${req.file.filename}`;
 
     await Product.save();
     return res.send(Product);
