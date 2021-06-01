@@ -1,0 +1,77 @@
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcryptjs");
+const UserModel = require("../../models/user");
+
+/* GET users listing. */
+router.get("/", async (req, res) => {
+  let Users = await UserModel.find();
+  return res.send(Users);
+});
+
+/*Get One User */
+router.get("/:id", async (req, res) => {
+  let User = await UserModel.findById(req.params.id);
+  return res.send(User);
+});
+
+/*Post New User */
+router.post("/", async (req, res) => {
+  try {
+    console.log("TRY");
+    const password = req.body.password;
+    const confirmPassword = req.body.confirm_password;
+
+    if (password === confirmPassword) {
+      console.log("IN iF");
+      const passwordHash = await securePassowrd(password);
+      console.log(passwordHash);
+      let User = new UserModel();
+      User.name = req.body.name;
+      User.email = req.body.email;
+      User.ph_number = req.body.ph_number;
+      User.password = passwordHash;
+      User.confirm_password = passwordHash;
+
+      await User.save();
+      res.status(201).send(User);
+    } else {
+      res.send("Password not matched");
+    }
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+/*User Authentication */
+router.post("/login", async (req, res) => {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const useremail = await UserModel.findOne({ email: email });
+
+    matchPassword = await matchHashPassword(password, useremail.password);
+
+    if (matchPassword === true) {
+      res.send(true);
+    } else {
+      res.send("Username or Password is incorrect");
+    }
+  } catch (error) {
+    res.status(404).send("Username or Password is incorrect");
+  }
+});
+
+//Creating Hash Passowrd
+const securePassowrd = async (password) => {
+  const hashPassword = await bcrypt.hash(password, 10);
+  return hashPassword;
+};
+
+//Checking the Hash Password
+const matchHashPassword = async (password, hashPassword) => {
+  const matchPassword = await bcrypt.compare(password, hashPassword);
+  return matchPassword;
+};
+
+module.exports = router;
