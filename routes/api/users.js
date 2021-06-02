@@ -27,7 +27,6 @@ router.post("/", async (req, res) => {
     if (password === confirmPassword) {
       //const passwordHash = await securePassowrd(password);
       const hashPassword = await bcrypt.hash(password, 10);
-      console.log(passwordHash);
       let User = new UserModel();
       User.name = req.body.name;
       User.email = req.body.email;
