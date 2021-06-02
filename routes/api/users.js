@@ -18,12 +18,13 @@ router.get("/:id", async (req, res) => {
 /*Post New User */
 router.post("/", async (req, res) => {
   try {
-    console.log("TRY");
+    let user = await UserModel.findOne({ email: req.body.email });
+    if (user) return res.status(404).send("User Already Registered");
+
     const password = req.body.password;
     const confirmPassword = req.body.confirm_password;
 
     if (password === confirmPassword) {
-      console.log("IN iF");
       const passwordHash = await securePassowrd(password);
       console.log(passwordHash);
       let User = new UserModel();
@@ -42,7 +43,8 @@ router.post("/", async (req, res) => {
     res.status(404).send(error);
   }
 });
-/*User Authentication */
+
+/*User Authentication & Authorization */
 router.post("/login", async (req, res) => {
   try {
     const email = req.body.email;
