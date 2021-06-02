@@ -41,6 +41,7 @@ router.post("/", upload.single("productImage"), async (req, res) => {
     Product.price = req.body.price;
     Product.category = req.body.category;
     Product.tags = req.body.tags;
+    Product.stock = req.body.stock;
     Product.productImage = `https://my-shop-rest-api.herokuapp.com/productImage/${req.file.filename}`;
 
     await Product.save();
@@ -58,6 +59,7 @@ router.put("/:id", upload.single("productImage"), async (req, res) => {
   Product.price = req.body.price;
   Product.category = req.body.category;
   Product.tags = req.body.tags;
+  Product.stock = req.body.stock;
   Product.productImage = `https://my-shop-rest-api.herokuapp.com/productImage/${req.file.filename}`;
 
   await Product.save();
