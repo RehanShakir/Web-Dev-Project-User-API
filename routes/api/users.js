@@ -25,14 +25,15 @@ router.post("/", async (req, res) => {
     const confirmPassword = req.body.confirm_password;
 
     if (password === confirmPassword) {
-      const passwordHash = await securePassowrd(password);
+      //const passwordHash = await securePassowrd(password);
+      const hashPassword = await bcrypt.hash(password, 10);
       console.log(passwordHash);
       let User = new UserModel();
       User.name = req.body.name;
       User.email = req.body.email;
       User.ph_number = req.body.ph_number;
-      User.password = passwordHash;
-      User.confirm_password = passwordHash;
+      User.password = hashPassword;
+      User.confirm_password = hashPassword;
 
       await User.save();
       res.status(201).send(User);
@@ -52,7 +53,8 @@ router.post("/login", async (req, res) => {
 
     const useremail = await UserModel.findOne({ email: email });
 
-    matchPassword = await matchHashPassword(password, useremail.password);
+    //matchPassword = await matchHashPassword(password, useremail.password);
+    const matchPassword = await bcrypt.compare(password, useremail.password);
 
     if (matchPassword === true) {
       res.send(true);
@@ -65,15 +67,15 @@ router.post("/login", async (req, res) => {
 });
 
 //Creating Hash Passowrd
-const securePassowrd = async (password) => {
-  const hashPassword = await bcrypt.hash(password, 10);
-  return hashPassword;
-};
+// const securePassowrd = async (password) => {
+//   const hashPassword = await bcrypt.hash(password, 10);
+//   return hashPassword;
+// };
 
 //Checking the Hash Password
-const matchHashPassword = async (password, hashPassword) => {
-  const matchPassword = await bcrypt.compare(password, hashPassword);
-  return matchPassword;
-};
+// const matchHashPassword = async (password, hashPassword) => {
+//   const matchPassword = await bcrypt.compare(password, hashPassword);
+//   return matchPassword;
+// };
 
 module.exports = router;
