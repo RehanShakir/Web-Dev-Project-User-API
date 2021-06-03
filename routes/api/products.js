@@ -1,25 +1,15 @@
 const express = require("express");
-const multer = require("multer");
-const path = require("path");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: "rehanshakir-com",
+  api_key: "542656843685259",
+  api_secret: "_nY_4ZeWx9hqy2yxxQkvxTzo2W0",
+});
 
 const router = express.Router();
 
 const ProductModel = require("../../models/product");
-
-//Storage
-const storage = multer.diskStorage({
-  destination: "./assets/images",
-  filename: (req, file, callback) => {
-    return callback(
-      null,
-      `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`
-    );
-  },
-});
-
-const upload = multer({
-  storage: storage,
-});
 
 /*Get All Products */
 router.get("/", async (req, res) => {
@@ -34,7 +24,14 @@ router.get("/:id", async (req, res) => {
 });
 
 /* POST A NEW PRODUCT */
-router.post("/", upload.single("productImage"), async (req, res) => {
+router.post("/", async (req, res) => {
+  const file = req.files.photo;
+  const imageURL = await cloudinary.uploader.upload(
+    file.tempFilePath,
+    (err, result) => {
+      return result;
+    }
+  );
   try {
     let Product = new ProductModel();
     Product.name = req.body.name;
@@ -42,7 +39,7 @@ router.post("/", upload.single("productImage"), async (req, res) => {
     Product.category = req.body.category;
     Product.tags = req.body.tags;
     Product.stock = req.body.stock;
-    Product.productImage = `https://my-shop-rest-api.herokuapp.com/productImage/${req.file.filename}`;
+    Product.productImage = imageURL.url;
 
     await Product.save();
     return res.send(Product);
@@ -52,18 +49,29 @@ router.post("/", upload.single("productImage"), async (req, res) => {
 });
 
 /*Update A Product */
-router.put("/:id", upload.single("productImage"), async (req, res) => {
-  let Product = await ProductModel.findById(req.params.id);
+router.put("/:id", async (req, res) => {
+  const file = req.files.photo;
+  const imageURL = await cloudinary.uploader.upload(
+    file.tempFilePath,
+    (err, result) => {
+      return result;
+    }
+  );
+  try {
+    let Product = await ProductModel.findById(req.params.id);
+    Product.name = req.body.name;
+    Product.price = req.body.price;
+    Product.category = req.body.category;
+    Product.tags = req.body.tags;
+    Product.stock = req.body.stock;
+    Product.productImage = imageURL.url;
 
-  Product.name = req.body.name;
-  Product.price = req.body.price;
-  Product.category = req.body.category;
-  Product.tags = req.body.tags;
-  Product.stock = req.body.stock;
-  Product.productImage = `https://my-shop-rest-api.herokuapp.com/productImage/${req.file.filename}`;
-
-  await Product.save();
-  return res.send(Product);
+    await Product.save();
+    return res.send(Product);
+  } catch (error) {
+    res.send(error);
+    console.log(error.message);
+  }
 });
 
 /*Delete a Product */

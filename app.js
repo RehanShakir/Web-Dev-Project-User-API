@@ -1,6 +1,7 @@
 const createError = require("http-errors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const fileUpload = require("express-fileupload");
 
 //Routers
 const usersRouter = require("./routes/api/users");
@@ -9,6 +10,12 @@ const productsRouter = require("./routes/api/products");
 const app = express();
 require("./db/connection");
 
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -40,7 +47,7 @@ app.use(function (req, res, next) {
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
 
-app.use("/productImage", express.static("assets/images"));
+//app.use("/productImage", express.static("assets/images"));
 
 // Add headers
 
