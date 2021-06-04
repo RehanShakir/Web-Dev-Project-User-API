@@ -2,8 +2,11 @@ const createError = require("http-errors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
+const path = require("path");
+const hbs = require("hbs");
 
 //Routers
+const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/api/users");
 const productsRouter = require("./routes/api/products");
 
@@ -16,21 +19,31 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
+
+const static_path = path.join(__dirname, "./public");
+const views_path = path.join(__dirname, "./templates/views");
+const partials_path = path.join(__dirname, "./templates/partials");
+
+app.use(express.static(static_path));
+app.set("view engine", "hbs");
+app.set("views", views_path);
+hbs.registerPartials(partials_path);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
-  // Website you wish to allow to connect
+  // Permission to connect
   res.setHeader("Access-Control-Allow-Origin", "*");
 
-  // Request methods you wish to allow
+  // Request methods 
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
   );
 
-  // Request headers you wish to allow
+  // Request headers 
   res.setHeader(
     "Access-Control-Allow-Headers",
     "X-Requested-With,content-type"
@@ -44,10 +57,9 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
-
-//app.use("/productImage", express.static("assets/images"));
 
 // Add headers
 
