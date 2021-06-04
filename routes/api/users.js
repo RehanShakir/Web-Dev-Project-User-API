@@ -16,7 +16,7 @@ router.get("/:id", async (req, res) => {
 });
 
 /*Post New User */
-router.post("/", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     let user = await UserModel.findOne({ email: req.body.email });
     if (user) return res.status(404).send("User Already Registered");
@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
       User.confirm_password = hashPassword;
 
       await User.save();
-      res.status(201).send(User);
+      res.redirect("/");
     } else {
       res.send("Password not matched");
     }
@@ -56,7 +56,7 @@ router.post("/login", async (req, res) => {
     const matchPassword = await bcrypt.compare(password, useremail.password);
 
     if (matchPassword === true) {
-      res.send(true);
+      res.redirect("/");
     } else {
       res.send("Username or Password is incorrect");
     }
@@ -64,17 +64,5 @@ router.post("/login", async (req, res) => {
     res.status(404).send("Username or Password is incorrect");
   }
 });
-
-//Creating Hash Passowrd
-// const securePassowrd = async (password) => {
-//   const hashPassword = await bcrypt.hash(password, 10);
-//   return hashPassword;
-// };
-
-//Checking the Hash Password
-// const matchHashPassword = async (password, hashPassword) => {
-//   const matchPassword = await bcrypt.compare(password, hashPassword);
-//   return matchPassword;
-// };
 
 module.exports = router;
