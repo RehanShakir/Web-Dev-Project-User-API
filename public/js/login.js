@@ -1,4 +1,6 @@
-$(function () {
+
+$(function ()
+{
   $(".myBtn").click(handleLogin);
 });
 
@@ -8,11 +10,11 @@ function handleLogin() {
   const password = $("#password").val();
   console.log(password);
   $.ajax({
-    url: "https://localhost:3000/api/users/login",
+    url: "http://localhost:3000/api/users/login",
     method: "POST",
     data: { email, password },
     success: function (response) {
-      console.log(response);
+      //console.log(response);
     },
   });
   // e.preventDefault();

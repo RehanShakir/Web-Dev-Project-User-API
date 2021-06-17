@@ -25,14 +25,17 @@ router.get("/:id", async (req, res) => {
 
 /* POST A NEW PRODUCT */
 router.post("/", async (req, res) => {
-  const file = req.files.photo;
-  const imageURL = await cloudinary.uploader.upload(
-    file.tempFilePath,
-    (err, result) => {
-      return result;
-    }
-  );
+  console.log("In Photo");
   try {
+    const file = req.files.photo;
+    const imageURL = await cloudinary.uploader.upload(
+      file.tempFilePath,
+      (err, result) => {
+        return result, err;
+      }
+    );
+    console.log("In try");
+
     let Product = new ProductModel();
     Product.name = req.body.name;
     Product.price = req.body.price;

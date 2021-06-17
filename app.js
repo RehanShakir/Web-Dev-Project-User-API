@@ -1,9 +1,14 @@
+require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
+const cors = require("cors");
 const path = require("path");
 const hbs = require("hbs");
+const session = require("express-session");
+const flash = require("express-flash");
+const MongoDbStore = require("connect-mongo");
 
 //Routers
 const indexRouter = require("./routes/index");
@@ -13,6 +18,24 @@ const productsRouter = require("./routes/api/products");
 const app = express();
 require("./db/connection");
 
+//Session Configuration
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoDbStore.create({
+      mongoUrl:
+        "mongodb+srv://rehan:rehan@cluster0.qhfay.mongodb.net/shop?retryWrites=true&w=majority",
+      collectionName: "sessions",
+    }),
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }, //24 hours
+  })
+);
+
+app.use(flash());
+
+app.use(cors());
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -28,22 +51,39 @@ app.use(express.static(static_path));
 app.set("view engine", "hbs");
 app.set("views", views_path);
 hbs.registerPartials(partials_path);
+hbs.registerHelper("json", function (obj) {
+  return JSON.stringify(obj);
+});
+hbs.registerHelper("ternary", require("handlebars-helper-ternary"));
+hbs.registerHelper("multiply", function (val1, val2) {
+  return val1 * val2;
+});
+hbs.registerHelper("counter", function (index) {
+  return index + 1;
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 app.use(cookieParser());
+
+//global middleware
+
+app.use((req, res, next) => {
+  res.locals.session = req.sessions;
+  next();
+});
 
 app.use(function (req, res, next) {
   // Permission to connect
   res.setHeader("Access-Control-Allow-Origin", "*");
 
-  // Request methods 
+  // Request methods
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
   );
-
-  // Request headers 
+  // Request headers
   res.setHeader(
     "Access-Control-Allow-Headers",
     "X-Requested-With,content-type"
@@ -56,7 +96,10 @@ app.use(function (req, res, next) {
   // Pass to next layer of middleware
   next();
 });
-
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);

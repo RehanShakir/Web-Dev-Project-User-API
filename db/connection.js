@@ -3,7 +3,12 @@ const mongoose = require("mongoose");
 mongoose
   .connect(
     "mongodb+srv://rehan:rehan@cluster0.qhfay.mongodb.net/shop?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: true,
+    }
   )
   .then(() => {
     console.log("Connected To MongoDB");

@@ -1,0 +1,56 @@
+<html lang="en">
+  <head>
+    {{>header}}
+    
+
+    <script src="./js/cart.js"></script>
+
+    {{!-- Cart CSS --}}
+     <link rel="stylesheet" href="./css/cart.css">
+
+
+    <title>Cart</title>
+  </head>
+  <body>
+     {{>navbar}}
+     <div class="container myContainer">
+       <h1 class="mainHeading">Cart</h1>
+       <hr>
+       <table class="table">
+  <thead>
+    <tr class="table-secondary">
+      <th scope="col">#</th>
+      <th scope="col"></th>
+      <th scope="col">Product</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Sub Total</th>
+    </tr>
+  </thead>
+{{#each session.cart.items as |product|}}
+  <tbody>
+        <tr>
+          <th scope="row">{{counter @index}}</th>
+          <td><img class="cartImage" src="{{product.item.productImage}}"/></td>
+          <td>{{product.item.name}}</td>
+          <td>Rs. {{product.item.price}}</td>
+          <td>{{product.qty}}</td>
+          <td>Rs. {{multiply product.item.price product.qty}}</td>
+        </tr>
+    </tbody>
+{{/each}}
+  </table>
+     <button class="btn btn-primary ">Checkout</button>
+    <div class="float-md-end">
+      <span class="justify-content-right"><strong>Total Rs.</strong> {{session.cart.totalPrice}}</span>
+      <span class="justify-content-right"><strong>Total Items.</strong> {{session.cart.totalQty}}</span>
+    </div>
+     </div>
+
+     <div>
+       <h2>Cart is Empty</h2>
+     </div>
+     
+     {{>footer}}
+  </body>
+</html>

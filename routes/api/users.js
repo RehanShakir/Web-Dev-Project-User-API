@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const UserModel = require("../../models/user");
-
+let userAuth = false;
 /* GET users listing. */
 router.get("/", async (req, res) => {
   let Users = await UserModel.find();
@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
       User.confirm_password = hashPassword;
 
       await User.save();
-      res.redirect("/");
+      //res.redirect("/");
     } else {
       res.send("Password not matched");
     }
@@ -52,11 +52,12 @@ router.post("/login", async (req, res) => {
 
     const useremail = await UserModel.findOne({ email: email });
 
-    //matchPassword = await matchHashPassword(password, useremail.password);
     const matchPassword = await bcrypt.compare(password, useremail.password);
 
     if (matchPassword === true) {
-      res.redirect("/");
+      module.exports.userAuth = true;
+
+      res.redirect("http://localhost:3000/admin");
     } else {
       res.send("Username or Password is incorrect");
     }
@@ -66,3 +67,4 @@ router.post("/login", async (req, res) => {
 });
 
 module.exports = router;
+module.exports.userAuth = false;

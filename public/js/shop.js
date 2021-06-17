@@ -5,7 +5,7 @@ $(function () {
 
 function loadProducts() {
   $.ajax({
-    url: "http://localhost:3000/api/products/",
+    url: "https://my-shop-rest-api.herokuapp.com/api/products/",
     method: "GET",
     success: function (response) {
       $(".allProducts").empty();
@@ -24,7 +24,7 @@ function loadProducts() {
                   <div class="buttons d-flex flex-row">
                     <div class="cart"><i class="fa fa-shopping-cart"></i></div>
                     <button class="btn btn-success cart-button btn-block">
-                      <span class="dot">1</span>Add to cart
+                      <span class="dot">1</span><a href="/cart">Add to cart</a>
                     </button>
                   </div>
                   <div class="weight"><small>Stock: ${product.stock}</small></div>

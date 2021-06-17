@@ -1,3 +1,11 @@
+@import "~noty/src/noty.scss";
+@import "~noty/src/themes/mint.scss";
+
+body {
+  display: flex;
+  flex-direction: column;
+  /* min-height: 100vh; */
+}
 .headerTop {
   background-color: #232f3e;
 
@@ -52,11 +60,22 @@
   margin-left: -50px;
   float: left;
 }
-.fa-user {
-  margin-top: 20px;
-  /* margin-left: 250px; */
 
-  font-size: 35px;
+.fa-shopping-cart {
+  padding-left: 10px;
+  margin-top: 20px;
+
+  font-size: 25px;
+  color: white;
+}
+.cartCounter {
+  font-size: 15px;
+}
+.fa-user {
+  padding-left: 10px;
+  margin-top: 13px;
+
+  font-size: 25px;
   color: white;
 }
 .main-menu {
@@ -190,10 +209,10 @@
 /*Login Page*/
 /* BASIC */
 
-body {
+/* body {
   font-family: "Poppins", sans-serif;
   height: 100vh;
-}
+} */
 
 a {
   color: #92badd;
@@ -221,6 +240,8 @@ h2 {
   justify-content: center;
   width: 100%;
   min-height: 100%;
+  margin-bottom: 50px;
+  margin-top: 50px;
 }
 
 #formContent {
@@ -299,7 +320,10 @@ input[type="reset"]:active {
 input[type="email"],
 input[type="password"],
 input[type="tel"],
-input[type="name"] {
+input[type="name"],
+input[type="text"],
+input[type="file"],
+input[type="number"] {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
@@ -468,4 +492,8 @@ input[type="text"]:placeholder {
 }
 .myRmainText {
   position: sticky;
+}
+.footer {
+  width: 100%;
+  margin-top: auto;
 }
