@@ -28,6 +28,9 @@ router.get("/allProducts", (req, res) => {
 router.get("/cart", cartController().cart);
 router.post("/update-cart", cartController().update);
 router.get("/admin", authController().login);
+
+
+
 // router.get("*", (req, res) => {
 //   res.render("404", {
 //     errorcomment: "Opps, Page Not Found",

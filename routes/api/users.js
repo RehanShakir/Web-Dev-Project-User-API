@@ -25,7 +25,6 @@ router.post("/register", async (req, res) => {
     const confirmPassword = req.body.confirm_password;
 
     if (password === confirmPassword) {
-      //const passwordHash = await securePassowrd(password);
       const hashPassword = await bcrypt.hash(password, 10);
       let User = new UserModel();
       User.name = req.body.name;
@@ -35,7 +34,6 @@ router.post("/register", async (req, res) => {
       User.confirm_password = hashPassword;
 
       await User.save();
-      //res.redirect("/");
     } else {
       res.send("Password not matched");
     }
@@ -57,7 +55,7 @@ router.post("/login", async (req, res) => {
     if (matchPassword === true) {
       module.exports.userAuth = true;
 
-      res.redirect("http://localhost:3000/admin");
+      res.redirect("https://my-shop-rest-api.herokuapp.com/admin");
     } else {
       res.send("Username or Password is incorrect");
     }
