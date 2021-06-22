@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const UserModel = require("../../models/user");
+const flash = require("express-flash");
+const passport = require("passport");
 let userAuth = false;
+
 /* GET users listing. */
 router.get("/", async (req, res) => {
   let Users = await UserModel.find();
@@ -18,51 +21,56 @@ router.get("/:id", async (req, res) => {
 /*Post New User */
 router.post("/register", async (req, res) => {
   try {
-    let user = await UserModel.findOne({ email: req.body.email });
-    if (user) return res.status(404).send("User Already Registered");
+    let { name, email, ph_number, password, confirm_password } = req.body;
 
-    const password = req.body.password;
-    const confirmPassword = req.body.confirm_password;
+    if (!name || !email || !ph_number || !password || !confirm_password) {
+      req.flash("error", "All fields are required");
+      req.flash("name", name);
+      req.flash("email", email);
+      req.flash("ph_number", ph_number);
+      return res.redirect("/register");
+    }
 
-    if (password === confirmPassword) {
+    let user = await UserModel.findOne({ email });
+
+    if (user) {
+      req.flash("error", "User already registered");
+      return res.redirect("/register");
+    }
+    if (password === confirm_password) {
       const hashPassword = await bcrypt.hash(password, 10);
       let User = new UserModel();
-      User.name = req.body.name;
-      User.email = req.body.email;
-      User.ph_number = req.body.ph_number;
+      User.name = name;
+      User.email = email;
+      User.ph_number = ph_number;
       User.password = hashPassword;
       User.confirm_password = hashPassword;
 
       await User.save();
+      //login
     } else {
-      res.send("Password not matched");
+      req.flash("error", "Password Not Matched");
+      req.flash("name", name);
+      req.flash("email", email);
+      req.flash("ph_number", ph_number);
+      res.redirect("/register");
     }
   } catch (error) {
+    // req.flash("error", "User Already Registered");
+    // res.redirect("/register");
     res.status(404).send(error);
   }
 });
 
 /*User Authentication & Authorization */
-router.post("/login", async (req, res) => {
-  try {
-    const email = req.body.email;
-    const password = req.body.password;
-
-    const useremail = await UserModel.findOne({ email: email });
-
-    const matchPassword = await bcrypt.compare(password, useremail.password);
-
-    if (matchPassword === true) {
-      module.exports.userAuth = true;
-
-      res.redirect("https://my-shop-rest-api.herokuapp.com/admin");
-    } else {
-      res.send("Username or Password is incorrect");
-    }
-  } catch (error) {
-    res.status(404).send("Username or Password is incorrect");
-  }
-});
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: true,
+  })
+);
 
 module.exports = router;
 module.exports.userAuth = false;

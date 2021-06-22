@@ -467,6 +467,9 @@ input[type="text"]:placeholder {
   content: "";
   transition: width 0.2s;
 }
+.registerSpan {
+  color: #ffd200;
+}
 
 .underlineHover:hover {
   color: #0d0d0d;

@@ -13,15 +13,20 @@
   <body>
     <!--Main-->
     <a class="underlineHover myRmainText" href="/">Return to hompage</a>
+
     <div class="wrapper fadeInDown">
       <div id="formContent">
         <!-- Tabs Titles -->
 
         <!-- Icon -->
+        {{#if messages.error}}
+          <span class="registerSpan">{{messages.error}}</span><br>
+        {{/if}}
+
         <div class="fadeIn first">
           <img class="loginFormImage" src="./images/logo.png" />
         </div>
-        <h2>Employee Registeration</h2>
+        <h2>Register</h2>
 
         <!-- Login Form -->
         <form action="/api/users/register" method="POST">
@@ -31,6 +36,7 @@
             class="fadeIn second"
             name="name"
             placeholder="Name"
+            value="{{messages.name}}"
           />
           <input
             type="email"
@@ -38,6 +44,7 @@
             class="fadeIn second"
             name="email"
             placeholder="Email"
+            value="{{messages.email}}"
           />
           <input
             type="tel"
@@ -45,6 +52,7 @@
             class="fadeIn second"
             name="ph_number"
             placeholder="Ph Number"
+            value="{{messages.ph_number}}"
           />
           <input
             type="password"

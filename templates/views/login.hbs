@@ -1,9 +1,9 @@
 <html lang="en">
   <head>
     {{>header}}
-    <script src="./js/login.js"></script>
+    {{!-- <script src="./js/login.js"></script> --}}
 
-    <title>Admin Login</title>
+    <title>Login</title>
   </head>
   <body>
      {{>navbar}}
@@ -13,6 +13,10 @@
         <!-- Tabs Titles -->
 
         <!-- Icon -->
+
+         {{#if messages.error}}
+          <span class="registerSpan"><strong>{{messages.error}}</strong></span><br>
+        {{/if}}
         <div class="fadeIn first">
           <img class="loginFormImage" src="./images/logo.png" />
         </div>
@@ -26,6 +30,7 @@
             class="fadeIn second"
             name="email"
             placeholder="Email"
+            value="{{messages.email}}"
           />
           <input
             type="password"

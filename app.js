@@ -9,6 +9,7 @@ const hbs = require("hbs");
 const session = require("express-session");
 const flash = require("express-flash");
 const MongoDbStore = require("connect-mongo");
+const passport = require("passport");
 
 //Routers
 const indexRouter = require("./routes/index");
@@ -17,6 +18,7 @@ const productsRouter = require("./routes/api/products");
 
 const app = express();
 require("./db/connection");
+
 
 //Session Configuration
 app.use(
@@ -32,6 +34,13 @@ app.use(
     cookie: { maxAge: 1000 * 60 * 60 * 24 }, //24 hours
   })
 );
+
+//Passport Configuration
+const passportConfig = require("./app/config/passport");
+passportConfig(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use(flash());
 
@@ -88,6 +97,7 @@ app.use(function (req, res, next) {
     "Access-Control-Allow-Headers",
     "X-Requested-With,content-type"
   );
+  //res.setHeader("Content-Type", "text/plain");
 
   // Set to true if you need the website to include cookies in the requests sent
   // to the API (e.g. in case you use sessions)
@@ -98,6 +108,7 @@ app.use(function (req, res, next) {
 });
 app.use(function (req, res, next) {
   res.locals.session = req.session;
+  res.locals.user = req.user;
   next();
 });
 app.use("/", indexRouter);
