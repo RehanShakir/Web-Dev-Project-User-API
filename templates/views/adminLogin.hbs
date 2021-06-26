@@ -2,7 +2,7 @@
   <head>
     {{>header}}
 
-    <title>Login</title>
+    <title>Admin Login</title>
   </head>
   <body>
      {{>navbar}}
@@ -19,10 +19,10 @@
         <div class="fadeIn first">
           <img class="loginFormImage" src="./images/logo.png" />
         </div>
-        <h2>Customer Login</h2>
+        <h2>Admin Login</h2>
 
         <!-- Login Form -->
-        <form action="/api/users/login" method="POST">
+        <form action="/api/users/admin-login" method="POST">
           <input
             type="email"
             id="email"

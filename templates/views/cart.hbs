@@ -13,22 +13,23 @@
   </head>
   <body>
      {{>navbar}}
-     <div class="container myContainer">
+   <div class="container myContainer">
        <h1 class="mainHeading">Cart</h1>
        <hr>
+       {{#if session.cart.items}}
        <table class="table">
-  <thead>
-    <tr class="table-secondary">
-      <th scope="col">#</th>
-      <th scope="col"></th>
-      <th scope="col">Product</th>
-      <th scope="col">Price</th>
-      <th scope="col">Quantity</th>
-      <th scope="col">Sub Total</th>
-    </tr>
-  </thead>
-{{#each session.cart.items as |product|}}
-  <tbody>
+        <thead>
+        <tr class="table-secondary">
+        <th scope="col">#</th>
+        <th scope="col"></th>
+        <th scope="col">Product</th>
+        <th scope="col">Price</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Sub Total</th>
+        </tr>
+        </thead>
+      {{#each session.cart.items as |product|}}
+    <tbody>
         <tr>
           <th scope="row">{{counter @index}}</th>
           <td><img class="cartImage" src="{{product.item.productImage}}"/></td>
@@ -38,19 +39,52 @@
           <td>Rs. {{multiply product.item.price product.qty}}</td>
         </tr>
     </tbody>
-{{/each}}
-  </table>
-     <button class="btn btn-primary ">Checkout</button>
+    {{/each}}
+    </table>
+    {{#if user}}
+    <form action="/orders" method="POST" class="cart-form">
+          <input
+            type="tel"
+            id="price"
+            class="fadeIn second"
+            name="ph_number"
+            placeholder="Phone Number"
+          />
+          <input
+            type="text"
+            id="category"
+            class="fadeIn second"
+            name="address"
+            placeholder="Address"
+          />
+          <select id="payment" name="paymentType">
+            <option value="COD">Cash On Delivery</option>
+            <option value="Online Payment">Credit Card</option>
+          </select>
+          <br>
+          <button type="submit" class="fadeIn fourth myBtn rounded-pill">Checkout</button>
+        </form>
+     {{!-- <button class="btn btn-primary rounded-pill">Checkout</button> --}}
+    {{else}}
+     <a href="/login"><button class="btn btn-primary rounded-pill">Login to Continue</button></a>
+    {{/if}}
+    
+    
     <div class="float-md-end">
       <span class="justify-content-right"><strong>Total Rs.</strong> {{session.cart.totalPrice}}</span>
       <span class="justify-content-right"><strong>Total Items.</strong> {{session.cart.totalQty}}</span>
     </div>
-     </div>
 
+      
+     {{else}}
      <div>
-       <h2>Cart is Empty</h2>
+       <h1>Cart is Empty</h1>
      </div>
-     
-     {{>footer}}
+     {{/if}}
+
+  </div>
+
+  
+  {{>footer}}
   </body>
 </html>

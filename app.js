@@ -19,7 +19,6 @@ const productsRouter = require("./routes/api/products");
 const app = express();
 require("./db/connection");
 
-
 //Session Configuration
 app.use(
   session({
@@ -40,7 +39,6 @@ const passportConfig = require("./app/config/passport");
 passportConfig(passport);
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.use(flash());
 

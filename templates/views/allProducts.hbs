@@ -4,19 +4,104 @@
     {{>header}}
 
     <!--JS-->
-    <script src="./js/shop.js"></script>
     <script src="./js/products.js"></script>
 
-    <title>Shop</title>
+    <title>All Products</title>
   </head>
   <body>
-    {{>navbar}}
+    {{>adminNavBar}}
     <div class="wrapper">
       <div class="container">
-        <div class="row g-1 allProducts">Loading...</div>
+        <div class="row g-1 allProducts">
+          {{#each products as |product|}}
+          <div class="col-md-3 myProducts">
+              <div class="card p-3">
+                <div class="text-center">
+                  <img src="{{product.productImage}}" width="200" />
+                </div>
+                <div class="product-details">
+                  <span class="font-weight-bold d-block">Rs. {{product.price}}</span>
+                  <span>{{product.name}}</span>
+                  <div product_id="{{product._id}}" class="buttons d-flex flex-row myProd">
+                    <button class="btn btn-danger delBtn btn-block">
+                      Delete
+                    </button>
+                    <button class="btn btn-primary updateBtn btn-block">
+                      Update
+                    </button>
+                    
+                  </div>
+                  <div class="weight"><small>Stock: {{product.stock}}</small></div>
+                </div>
+              </div>
+            </div>
+            {{/each}}
+          </div>
       </div>
     </div>
-    <div>{{name}}</div>
+    {{!-- Update Product Start --}}
+                        <!--Edit Product Modal -->
+                        <!-- Button trigger modal -->
+                    {{!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                      Launch demo modal
+                    </button> --}}
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="editProductModalLabel">Update Product</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <form >
+                                <input
+                                  type="text"
+                                  id="title"
+                                  class="fadeIn second"
+                                  name="name"
+                                  placeholder="Name of Product"
+                                />
+                                <input
+                                  type="number"
+                                  id="price"
+                                  class="fadeIn second"
+                                  name="price"
+                                  placeholder="Price"
+                                />
+                                <input
+                                  type="text"
+                                  id="category"
+                                  class="fadeIn second"
+                                  name="category"
+                                  placeholder="Category"
+                                />
+                                <input
+                                  type="text"
+                                  id="tags"
+                                  class="fadeIn third"
+                                  name="tags"
+                                  placeholder="Tags"
+                                />
+                                <input
+                                  type="text"
+                                  id="stock"
+                                  class="fadeIn third"
+                                  name="stock"
+                                  placeholder="Stock"
+                                />
+                                
+                              </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary modalBtnUpdate">Update</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
     {{>footer}}
   </body>
 </html>

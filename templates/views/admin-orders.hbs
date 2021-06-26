@@ -1,0 +1,66 @@
+<html lang="en">
+  <head>
+    {{>header}}
+    <script src="./js/admin.js"></script>
+
+    <title>Admin Orders</title>
+  </head>
+  <body>
+     {{>navbar}}
+     <div class="container">
+         <h2>All Orders</h2>
+         {{#if messages.success}}
+         <div class="alert alert-primary" role="alert"><i class="fas fa-exclamation-circle"></i>{{messages.success}}</div>
+         {{/if}}
+         <div>HELLLo {{orders}}</div>
+    <table class="table table-bordered table-responsive">
+        <thead>
+          <tr class="table-secondary">
+            <th scope="col">Orders</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Address</th>
+            <th scope="col">Status</th>
+            <th scope="col">Placed At</th>
+          </tr>
+        </thead>
+        <tbody id="orderTableBody">
+          {{#each orders as |order|}}
+          <tr>
+                  <td>{{order._id}}<br>
+                  {{order.items}}
+                    {{!-- <div>{renderItems(orders.items)}</div> --}}
+                  </td>
+                  <td>{{order.customerId.name}}</td>
+                  <td>{{order.address}}</td>
+                <td>
+                  <form action="/admin/orders/status" method="post">
+                      <input type="hidden" name="orderId" value="${order._id}">
+                        <select name="status" onchange="this.form.submit()">
+                            {{!-- <option value="order-placed"
+                            {{ternary true 
+                              order.status === "order-placed" 
+                              false "selected" 
+                            }}>Placed --}}
+                            {{!-- </option>
+                            <option value="confirmed"
+                            ${
+                              order.status === "confirmed" ? "selected" : ""
+                            }>Placed
+                            </option>
+                            <option value="delivered"
+                            ${
+                              order.status === "delivered" ? "selected" : ""
+                            }>Placed
+                            </option> --}}
+                        </select>
+                  </form>
+                  </td>
+                  <td>{{order.createdAt}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+  </div>
+     {{>footer}}
+  </body>
+</html>

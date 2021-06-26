@@ -56,7 +56,7 @@ router.post("/register", async (req, res) => {
       res.redirect("/register");
     }
   } catch (error) {
-    // req.flash("error", "User Already Registered");
+    req.flash("error", "User Already Registered");
     // res.redirect("/register");
     res.status(404).send(error);
   }
@@ -71,6 +71,13 @@ router.post(
     failureFlash: true,
   })
 );
+router.post(
+  "/admin-login",
+  passport.authenticate("local", {
+    successRedirect: "/admin",
+    failureRedirect: "/login",
+    failureFlash: true,
+  })
+);
 
 module.exports = router;
-module.exports.userAuth = false;

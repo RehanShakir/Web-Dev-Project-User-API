@@ -323,7 +323,8 @@ input[type="tel"],
 input[type="name"],
 input[type="text"],
 input[type="file"],
-input[type="number"] {
+input[type="number"],
+#payment {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
@@ -496,7 +497,28 @@ input[type="text"]:placeholder {
 .myRmainText {
   position: sticky;
 }
+
 .footer {
   width: 100%;
   margin-top: auto;
+}
+.fa-exclamation-circle {
+  padding-right: 7px;
+}
+.updateBtn {
+  margin-left: 10px;
+}
+#editProductModal {
+  padding-right: 30px;
+}
+.myShopping {
+  color: #0d0d0d;
+  margin-left: -9px;
+  margin-bottom: 13px;
+}
+.wrapperShop {
+  margin-top: -50px;
+}
+.products-label {
+  margin-bottom: 10px;
 }

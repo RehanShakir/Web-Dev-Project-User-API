@@ -1,0 +1,40 @@
+<html lang="en">
+  <head>
+    {{>header}}
+
+    <title>Orders</title>
+  </head>
+  <body>
+     {{>navbar}}
+     <div class="container">
+         <h1>Orders</h1>
+         {{#if messages.success}}
+         <div class="alert alert-primary" role="alert"><i class="fas fa-exclamation-circle"></i>{{messages.success}}</div>
+         {{/if}}
+         <table class="table table-bordered table-responsive">
+        <thead>
+        <tr class="table-secondary">
+        <th scope="col">Orders</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Address</th>
+        <th scope="col">Time</th>
+        </tr>
+        </thead>
+    <tbody>
+      
+      {{#if orders.length}}
+          {{#each orders as |order|}}
+        <tr>
+          <td><a href="/">{{order._id}}</a></td>
+          <td>{{order.ph_number}}</td>
+          <td>{{order.address}}</td>
+          <td>{{order.createdAt}}</td>
+        </tr>
+          {{/each}}
+        {{/if}}
+    </tbody>
+    </table>
+  </div>
+     {{>footer}}
+  </body>
+</html>

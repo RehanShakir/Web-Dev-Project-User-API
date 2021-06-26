@@ -51,15 +51,9 @@ router.post("/", async (req, res) => {
   }
 });
 
+
 /*Update A Product */
 router.put("/:id", async (req, res) => {
-  const file = req.files.photo;
-  const imageURL = await cloudinary.uploader.upload(
-    file.tempFilePath,
-    (err, result) => {
-      return result;
-    }
-  );
   try {
     let Product = await ProductModel.findById(req.params.id);
     Product.name = req.body.name;
@@ -67,7 +61,6 @@ router.put("/:id", async (req, res) => {
     Product.category = req.body.category;
     Product.tags = req.body.tags;
     Product.stock = req.body.stock;
-    Product.productImage = imageURL.url;
 
     await Product.save();
     return res.send(Product);
@@ -76,6 +69,32 @@ router.put("/:id", async (req, res) => {
     console.log(error.message);
   }
 });
+/*Update A Product */
+// router.put("/:id", async (req, res) => {
+//   const file = req.files.photo;
+//   console.log(file);
+//   const imageURL = await cloudinary.uploader.upload(
+//     file.tempFilePath,
+//     (err, result) => {
+//       return result;
+//     }
+//   );
+//   try {
+//     let Product = await ProductModel.findById(req.params.id);
+//     Product.name = req.body.name;
+//     Product.price = req.body.price;
+//     Product.category = req.body.category;
+//     Product.tags = req.body.tags;
+//     Product.stock = req.body.stock;
+//     Product.productImage = imageURL.url;
+
+//     await Product.save();
+//     return res.send(Product);
+//   } catch (error) {
+//     res.send(error);
+//     console.log(error.message);
+//   }
+// });
 
 /*Delete a Product */
 router.delete("/:id", async (req, res) => {

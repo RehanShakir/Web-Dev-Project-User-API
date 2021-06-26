@@ -8,3 +8,8 @@
   height: 50px;
   width: 85.16px;
 }
+.cart-form > input,
+#payment {
+  width: 50%;
+  text-align: left !important;
+}
